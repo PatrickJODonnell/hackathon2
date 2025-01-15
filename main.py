@@ -1,6 +1,5 @@
 import requests
-from snowflake.snowpark.functions import udf
-from snowflake.snowpark.types import StringType
+import json
 
 
 def calculate_territorry(company: str):
@@ -28,16 +27,39 @@ def calculate_industry(company: str, territory: str):
 
 
 def main_territory(event: dict, context: dict) -> dict:
-    print(event)
+    company = event['queryStringParameters']['company']
+    response = calculate_territorry(company=company)
+    return {
+        "statusCode": 200,
+        "body": json.dumps(response.json())
+    }
 
 
 def main_calculate_company_rev(event: dict, context: dict) -> dict:
-    print(event)
+    company = event['queryStringParameters']['company']
+    territory = event['queryStringParameters']['territory']
+    response = calculate_company_revenue(company=company, territory=territory)
+    return {
+        "statusCode": 200,
+        "body": json.dumps(response.json())
+    }
 
 
 def main_calculate_company_size(event: dict, context: dict) -> dict:
-    print(event)
+    company = event['queryStringParameters']['company']
+    territory = event['queryStringParameters']['territory']
+    response = calculate_industry(company=company, territory=territory)
+    return {
+        "statusCode": 200,
+        "body": json.dumps(response.json())
+    }
 
 
 def main_calculate_industry(event: dict, context: dict) -> dict:
-    print(event)
+    company = event['queryStringParameters']['company']
+    territory = event['queryStringParameters']['territory']
+    response = calculate_industry(company=company, territory=territory)
+    return {
+        "statusCode": 200,
+        "body": json.dumps(response.json())
+    }
